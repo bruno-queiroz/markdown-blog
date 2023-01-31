@@ -1,10 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { deleteArticle } from "../fetch/deleteArticle";
 import { ArticleCardDataTypes } from "../fetch/getAllArticles";
 
 type ArticleCardProps = ArticleCardDataTypes;
 
-const ArticleCard = ({ title, createAt, description }: ArticleCardProps) => {
+const ArticleCard = ({
+  title,
+  createAt,
+  description,
+  _id,
+  fullArticleID,
+}: ArticleCardProps) => {
+  const handleDeleteArticle = (
+    fullArticleID: string,
+    articleSnippetID: string
+  ) => {
+    deleteArticle(fullArticleID, articleSnippetID);
+  };
   return (
     <article className="flex  flex-col p-6 rounded-md border-[2px] border-slate-600 gap-4">
       <h2 className="font-semibold text-2xl">{title}</h2>
@@ -30,7 +43,10 @@ const ArticleCard = ({ title, createAt, description }: ArticleCardProps) => {
             </Link>
           </li>
           <li>
-            <button className="py-2 px-4 rounded bg-red-600 text-white">
+            <button
+              className="py-2 px-4 rounded bg-red-600 text-white"
+              onClick={() => handleDeleteArticle(fullArticleID, _id)}
+            >
               Remove
             </button>
           </li>
