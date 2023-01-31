@@ -21,10 +21,6 @@ const NewArticle = () => {
     postArticle(newArticle);
   };
 
-  useEffect(() => {
-    // postArticle();
-  }, []);
-
   return (
     <section className="p-4">
       <h1 className="text-4xl font-semibold text-center">New Article</h1>
@@ -57,7 +53,7 @@ const NewArticle = () => {
         </label>
 
         <div className="flex gap-2 text-white">
-          <Link to="" className="py-2 px-4 rounded bg-gray-600 ">
+          <Link to="/" className="py-2 px-4 rounded bg-gray-600 ">
             Cancel
           </Link>
           <button className="py-2 px-4 rounded bg-blue-600">Save</button>
