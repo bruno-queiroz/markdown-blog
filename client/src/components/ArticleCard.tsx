@@ -1,18 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ArticleCardDataTypes } from "../fetch/getAllArticles";
 
-const ArticleCard = () => {
+type ArticleCardProps = ArticleCardDataTypes;
+
+const ArticleCard = ({ title, createAt, description }: ArticleCardProps) => {
   return (
     <article className="flex  flex-col p-6 rounded-md border-[2px] border-slate-600 gap-4">
-      <h2 className="font-semibold text-2xl">
-        Guard Clauses - The Best Way To Write Complex Conditional Logic
-      </h2>
+      <h2 className="font-semibold text-2xl">{title}</h2>
       <time className="text-gray-900">03/08/2023</time>
 
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima veniam
-        nulla nesciunt vitae soluta iusto, quod doloribus optio blanditiis
-      </p>
+      <p>{description}</p>
       <nav>
         <ul className="flex mt-2 gap-4 items-center">
           <li>
