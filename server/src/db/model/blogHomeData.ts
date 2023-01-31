@@ -7,12 +7,9 @@ const articleHomeDataSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  fullArticleID: String,
   slug: String,
 });
 
-const blogHomeDataSchema = new Schema({
-  homeData: { type: [articleHomeDataSchema], default: { homeData: [] } },
-});
-
-const BlogHomeData = mongoose.model("blog-home-data", blogHomeDataSchema);
+const BlogHomeData = mongoose.model("blog-home-data", articleHomeDataSchema);
 export default BlogHomeData;

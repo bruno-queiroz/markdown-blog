@@ -12,7 +12,7 @@ connectToDB();
 
 app.get("/get-all-articles", async (req, res) => {
   const allArticles = await BlogHomeData.find();
-  res.json(allArticles[0].homeData);
+  res.json(allArticles);
 });
 
 app.get("/test", async (req, res) => {
@@ -27,26 +27,20 @@ app.get("/test", async (req, res) => {
 app.post("/create-article", async (req, res) => {
   const { title, description, markdown } = req.body;
 
-  Article.create({
+  const articleCreated = await Article.create({
     title,
     description,
     markdown: [markdown],
     slug: "everything-you-need-to-know-about-typescript",
   });
-  const newArticleData = {
+
+  const newArticleSnippetData = {
     title,
     description,
     slug: "test-slug",
+    fullArticleID: articleCreated._id,
   };
-  console.log(req.body);
-  const blogHomeData = await BlogHomeData.findOne();
-  if (blogHomeData === null) {
-    await BlogHomeData.create({
-      homeData: [],
-    });
-  }
-  blogHomeData?.homeData.push(newArticleData);
-  await blogHomeData?.save();
+  BlogHomeData.create(newArticleSnippetData);
 });
 
 app.listen(3000, () => {
