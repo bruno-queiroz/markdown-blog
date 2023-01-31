@@ -15,10 +15,9 @@ const NewArticle = () => {
 
     const newArticle = {
       title: titleInputValue.current!.value,
-      descripition: descriptionTextAreaValue.current!.value,
+      description: descriptionTextAreaValue.current!.value,
       markdown: markdownTextAreaValue.current!.value,
     };
-
     postArticle(newArticle);
   };
 
