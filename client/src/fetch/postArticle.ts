@@ -1,6 +1,6 @@
 interface PostArticlePayload {
   title: string;
-  descripition: string;
+  description: string;
   markdown: string;
 }
 
