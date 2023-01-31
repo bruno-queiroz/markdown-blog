@@ -43,6 +43,15 @@ app.post("/create-article", async (req, res) => {
   BlogHomeData.create(newArticleSnippetData);
 });
 
+app.delete(
+  "/delete-article/:fullArticleID/:articleSnippetID",
+  async (req, res) => {
+    const { fullArticleID, articleSnippetID } = req.params;
+    const a = await Article.findByIdAndDelete({ _id: fullArticleID });
+    const b = await BlogHomeData.findByIdAndDelete({ _id: articleSnippetID });
+  }
+);
+
 app.listen(3000, () => {
   console.log("server running");
 });
