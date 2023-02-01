@@ -4,6 +4,7 @@ import cors from "cors";
 import Article from "./db/model/article";
 import md from "markdown-it";
 import BlogHomeData from "./db/model/blogHomeData";
+import { createSlug } from "./utils/createSlug";
 
 const app = express();
 app.use(cors());
@@ -15,29 +16,30 @@ app.get("/get-all-articles", async (req, res) => {
   res.json(allArticles);
 });
 
-app.get("/test", async (req, res) => {
-  const articleData = await Article.find({
-    slug: "everything-you-need-to-know-about-typescript",
-  });
-  if (!articleData) return;
-  const articleHTML = md().render(articleData[0].markdown[0]!);
-  res.json(articleHTML);
+app.get("/get-article/:articleSlug", async (req, res) => {
+  const { articleSlug } = req.params;
+
+  const article = await Article.findOne({ slug: articleSlug });
+  const html = md().render(article?.markdown[0] || "");
+  article!.html = html;
+
+  res.json(article);
 });
 
 app.post("/create-article", async (req, res) => {
   const { title, description, markdown } = req.body;
-
+  const slug = createSlug(title);
   const articleCreated = await Article.create({
     title,
     description,
     markdown: [markdown],
-    slug: "everything-you-need-to-know-about-typescript",
+    slug,
   });
 
   const newArticleSnippetData = {
     title,
     description,
-    slug: "test-slug",
+    slug,
     fullArticleID: articleCreated._id,
   };
   BlogHomeData.create(newArticleSnippetData);
@@ -47,8 +49,8 @@ app.delete(
   "/delete-article/:fullArticleID/:articleSnippetID",
   async (req, res) => {
     const { fullArticleID, articleSnippetID } = req.params;
-    const a = await Article.findByIdAndDelete({ _id: fullArticleID });
-    const b = await BlogHomeData.findByIdAndDelete({ _id: articleSnippetID });
+    await Article.findByIdAndDelete({ _id: fullArticleID });
+    await BlogHomeData.findByIdAndDelete({ _id: articleSnippetID });
   }
 );
 
