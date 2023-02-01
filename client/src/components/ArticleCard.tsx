@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
 import { deleteArticle } from "../fetch/deleteArticle";
@@ -9,6 +10,7 @@ const ArticleCard = ({
   title,
   createAt,
   description,
+  slug,
   _id,
   fullArticleID,
 }: ArticleCardProps) => {
@@ -21,14 +23,14 @@ const ArticleCard = ({
   return (
     <article className="flex  flex-col p-6 rounded-md border-[2px] border-slate-600 gap-4">
       <h2 className="font-semibold text-2xl">{title}</h2>
-      <time className="text-gray-900">03/08/2023</time>
+      <time className="text-gray-900">{moment(createAt).format("L")}</time>
 
       <p>{description}</p>
       <nav>
         <ul className="flex mt-2 gap-4 items-center">
           <li>
             <Link
-              to="/article/test-article"
+              to={`/article/${slug}`}
               className="py-2 px-4 rounded bg-blue-600 text-white"
             >
               Read More
@@ -36,7 +38,7 @@ const ArticleCard = ({
           </li>
           <li>
             <Link
-              to="/edit-article/42ss7908hs8vs0f9w"
+              to={`/edit-article/${slug}`}
               className="py-2 px-4 rounded bg-cyan-500 text-white"
             >
               Edit
