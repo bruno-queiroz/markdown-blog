@@ -3,6 +3,8 @@ export interface ArticleCardDataTypes {
   description: string;
   createAt: Date;
   _id: string;
+  fullArticleID: string;
+  slug: string;
 }
 
 export const getAllArticles = async () => {
