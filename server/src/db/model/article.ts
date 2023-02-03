@@ -9,6 +9,7 @@ const articleSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  html: String,
 });
 
 const Article = mongoose.model("Article", articleSchema);
