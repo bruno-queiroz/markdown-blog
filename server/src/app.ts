@@ -43,6 +43,7 @@ app.post("/create-article", async (req, res) => {
     fullArticleID: articleCreated._id,
   };
   BlogHomeData.create(newArticleSnippetData);
+  res.json({ status: "success", msg: "Article created Successfully!" });
 });
 
 app.delete(
@@ -51,8 +52,24 @@ app.delete(
     const { fullArticleID, articleSnippetID } = req.params;
     await Article.findByIdAndDelete({ _id: fullArticleID });
     await BlogHomeData.findByIdAndDelete({ _id: articleSnippetID });
+    res.json({ status: "success", msg: "Article Deleted Successfully!" });
   }
 );
+
+app.patch("/edit-article/:articleSlug", async (req, res) => {
+  const { articleSlug } = req.params;
+  const { title, description, markdown } = req.body;
+
+  await Article.findOneAndUpdate(
+    { slug: articleSlug },
+    { title, description, markdown, slug: createSlug(title) }
+  );
+  await BlogHomeData.findOneAndUpdate(
+    { slug: articleSlug },
+    { title, description, slug: createSlug(title) }
+  );
+  res.json({ status: "success", msg: "Article Edited Successfullly!" });
+});
 
 app.listen(3000, () => {
   console.log("server running");
