@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getArticleData } from "../fetch/getArticleData";
+import { Link, useParams } from "react-router-dom";
+import { ArticleTypes, getArticleData } from "../fetch/getArticleData";
+import moment from "moment";
+
 import htmlParser from "html-react-parser";
+import { ArticleStyle } from "../style/ArticleStyle";
 
 const Article = () => {
-  const [articleData, setArticleData] = useState("");
-  console.log(articleData);
+  const { articleSlug } = useParams();
+  const [articleData, setArticleData] = useState<ArticleTypes>(
+    {} as ArticleTypes
+  );
   useEffect(() => {
     const getData = async () => {
-      setArticleData(await getArticleData());
+      setArticleData(await getArticleData(articleSlug!));
     };
     getData();
   }, []);
   return (
     <section className="p-4">
       <header className="py-4 border-b-[1px] border-slate-700">
-        <h1 className="text-[4rem] font-semibold">
-          {" "}
-          Guard Clauses - The Best Way To Write Complex Conditional Logic
-        </h1>
-        <time>03/07/2022</time>
+        <h1 className="text-[4rem] font-semibold"> {articleData?.title}</h1>
+        <time className="mt-2">
+          {moment(articleData?.createAt).format("L")}
+        </time>
         <nav className="flex gap-2 text-white mt-4">
           <Link to="/" className="py-2 px-4 rounded bg-gray-500">
             All Articles
           </Link>
           <Link
-            to="/edit-article/j5j4lljbk3pjj5n3"
+            to={`/edit-article/${articleSlug}`}
             className="py-2 px-4 rounded bg-green-500"
           >
             Edit
@@ -33,9 +37,9 @@ const Article = () => {
         </nav>
       </header>
       <main className="mt-4">
-        <article className="flex flex-col gap-4">
-          {htmlParser(articleData)}
-        </article>
+        <ArticleStyle>
+          {articleData.html && htmlParser(articleData.html)}
+        </ArticleStyle>
       </main>
     </section>
   );
