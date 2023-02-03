@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 import { deleteArticle } from "../fetch/deleteArticle";
 import { ArticleCardDataTypes } from "../fetch/getAllArticles";
 
-type ArticleCardProps = ArticleCardDataTypes;
+type ArticleCardProps = ArticleCardDataTypes & {
+  refreshArticles: () => void;
+};
 
 const ArticleCard = ({
   title,
@@ -13,12 +15,13 @@ const ArticleCard = ({
   slug,
   _id,
   fullArticleID,
+  refreshArticles,
 }: ArticleCardProps) => {
   const handleDeleteArticle = (
     fullArticleID: string,
     articleSnippetID: string
   ) => {
-    deleteArticle(fullArticleID, articleSnippetID);
+    deleteArticle(fullArticleID, articleSnippetID, refreshArticles);
   };
   return (
     <article className="flex  flex-col p-6 rounded-md border-[2px] border-slate-600 gap-4">
