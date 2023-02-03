@@ -5,6 +5,7 @@ interface PostArticlePayload {
 }
 
 export const postArticle = async (newArticle: PostArticlePayload) => {
+  console.log(newArticle);
   const response = await fetch("http://localhost:3000/create-article", {
     method: "POST",
     headers: {
