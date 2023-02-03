@@ -5,16 +5,18 @@ import { ArticleCardDataTypes, getAllArticles } from "../fetch/getAllArticles";
 
 const Home = () => {
   const [allArticles, setAllArticles] = useState<ArticleCardDataTypes[]>([]);
-  console.log(allArticles);
+  const getArticles = async () => {
+    console.log("refreshing");
+    const articles = await getAllArticles();
+    console.log(articles);
+    setAllArticles(articles);
+  };
   useEffect(() => {
-    const getArticles = async () => {
-      const articles = await getAllArticles();
-      setAllArticles(articles);
-    };
     getArticles();
   }, []);
+
   return (
-    <section className="flex flex-col pt-4 gap-4 w-full max-w-[900px] mx-auto">
+    <section className="flex flex-col p-4 gap-4 w-full max-w-[900px] mx-auto">
       <h1 className="font-semibold text-4xl">Blog Articles</h1>
       <Link
         to="/new-article"
@@ -24,7 +26,11 @@ const Home = () => {
       </Link>
       <main className="flex flex-col gap-4">
         {allArticles?.map((article, index) => (
-          <ArticleCard key={index} {...article} />
+          <ArticleCard
+            key={index}
+            {...article}
+            {...{ refreshArticles: () => getArticles() }}
+          />
         ))}
       </main>
     </section>
