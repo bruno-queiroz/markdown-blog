@@ -1,28 +1,42 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { postArticle } from "../fetch/postArticle";
+import Notificate from "../components/Notificate";
+import { postArticle, PostArticleServerResponse } from "../fetch/postArticle";
 
 const NewArticle = () => {
+  const [postArticleServerResponse, setPostArticleServerResponse] =
+    useState<PostArticleServerResponse>({ status: "error", msg: "" });
+
   const titleInputValue = useRef<HTMLInputElement>(null);
   const descriptionTextAreaValue = useRef<HTMLTextAreaElement>(null);
   const markdownTextAreaValue = useRef<HTMLTextAreaElement>(null);
 
-  const handlePostArticle = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePostArticle = async (event: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
 
-    if (!titleInputValue && !descriptionTextAreaValue && !markdownTextAreaValue)
+    if (
+      !titleInputValue.current?.value &&
+      !descriptionTextAreaValue.current?.value &&
+      !markdownTextAreaValue.current?.value
+    ) {
+      setPostArticleServerResponse({ msg: "Empty Fields!", status: "error" });
       return;
+    }
 
     const newArticle = {
       title: titleInputValue.current!.value,
       description: descriptionTextAreaValue.current!.value,
       markdown: markdownTextAreaValue.current!.value,
     };
-    postArticle(newArticle);
+    setPostArticleServerResponse(await postArticle(newArticle));
   };
 
   return (
     <section className="p-4">
+      <Notificate
+        msg={postArticleServerResponse.msg}
+        variant={postArticleServerResponse.status}
+      />
       <h1 className="text-4xl font-semibold text-center">New Article</h1>
 
       <form
