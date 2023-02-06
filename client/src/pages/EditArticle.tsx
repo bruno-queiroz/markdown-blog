@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Notificate from "../components/Notificate";
 import { ArticleTypes, getArticleData } from "../fetch/getArticleData";
 import { patchArticle } from "../fetch/patchArticle";
-import { postArticle } from "../fetch/postArticle";
+import { postArticle, PostArticleServerResponse } from "../fetch/postArticle";
 
 const EditArticle = () => {
-  const [articleData, setArticleData] = useState<ArticleTypes>(
-    {} as ArticleTypes
-  );
+  const [postArticleServerResponse, setPostArticleServerResponse] =
+    useState<PostArticleServerResponse>({ status: "error", msg: "" });
+
   const { articleSlug } = useParams();
   const titleInputValue = useRef<HTMLInputElement>(null);
   const descriptionTextAreaValue = useRef<HTMLTextAreaElement>(null);
@@ -30,9 +31,11 @@ const EditArticle = () => {
       getArticleData(articleSlug!, fillInputs);
     };
     getData();
-  });
+  }, []);
 
-  const handleUpdateArticle = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateArticle = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     if (
       !titleInputValue.current?.value &&
@@ -46,10 +49,15 @@ const EditArticle = () => {
       markdown: markdownTextAreaValue.current!.value,
     };
 
-    patchArticle(articleSlug!, updatedArticle);
+    const patchResult = await patchArticle(articleSlug!, updatedArticle);
+    setPostArticleServerResponse(patchResult);
   };
   return (
     <section className="p-4">
+      <Notificate
+        msg={postArticleServerResponse.msg}
+        variant={postArticleServerResponse.status}
+      />
       <h1 className="text-4xl font-semibold text-center">Edit your Article</h1>
 
       <form
