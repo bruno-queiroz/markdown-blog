@@ -3,6 +3,10 @@ interface PostArticlePayload {
   description: string;
   markdown: string;
 }
+export interface PostArticleServerResponse {
+  status: "error" | "success";
+  msg: string;
+}
 
 export const postArticle = async (newArticle: PostArticlePayload) => {
   console.log(newArticle);
@@ -13,6 +17,6 @@ export const postArticle = async (newArticle: PostArticlePayload) => {
     },
     body: JSON.stringify(newArticle),
   });
-  const data = await response.json();
+  const data: PostArticleServerResponse = await response.json();
   return data;
 };
