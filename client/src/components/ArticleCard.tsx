@@ -10,7 +10,7 @@ type ArticleCardProps = ArticleCardDataTypes & {
 
 const ArticleCard = ({
   title,
-  createAt,
+  createdAt,
   description,
   slug,
   _id,
@@ -23,10 +23,11 @@ const ArticleCard = ({
   ) => {
     deleteArticle(fullArticleID, articleSnippetID, refreshArticles);
   };
+
   return (
     <article className="flex  flex-col p-6 rounded-md border-[2px] border-slate-600 gap-4">
       <h2 className="font-semibold text-2xl">{title}</h2>
-      <time className="text-gray-900">{moment(createAt).format("L")}</time>
+      <time className="text-gray-900">{moment(createdAt).format("L")}</time>
 
       <p>{description}</p>
       <nav>
