@@ -1,7 +1,7 @@
 export interface ArticleCardDataTypes {
   title: string;
   description: string;
-  createAt: Date;
+  createdAt: Date;
   _id: string;
   fullArticleID: string;
   slug: string;
